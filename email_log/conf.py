@@ -7,6 +7,7 @@ class Settings:
 
     class Default:
         EMAIL_LOG_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+        EXCLUDE_DJANGO_EMAILS = True
 
     def __init__(self):
         self.defaults = Settings.Default()

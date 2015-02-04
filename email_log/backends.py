@@ -12,9 +12,12 @@ class EmailBackend(BaseEmailBackend):
     def __init__(self, **kwargs):
         super(EmailBackend, self).__init__(**kwargs)
         self.connection = get_connection(settings.EMAIL_LOG_BACKEND, **kwargs)
+        self.exclude_django_emails = settings.EXCLUDE_DJANGO_EMAILS
 
     def send_messages(self, email_messages):
         num_sent = 0
+        if self.exclude_django_emails:
+            email_messages = filter(lambda x: not x.subject.startswith('[Django]'), email_messages)
         for message in email_messages:
             recipients = '; '.join(message.to)
             email = Email.objects.create(
